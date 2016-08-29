@@ -27,6 +27,7 @@ import java.io.File;
 import java.awt.List;
 import java.lang.Math;  
 
+
 public class WSS2_0 implements PlugIn { 
 	static File dir; 
 
@@ -42,6 +43,8 @@ public class WSS2_0 implements PlugIn {
 		int[][][] img = videoReader(mystack); 
 		
 		int[][][] img1 = imagefunction(img,dirname); 
+
+		boolean save = videocreator(img1,dirname,"After_Morphological");
 
 		JOptionPane.showMessageDialog(null,"DONE!"); 
 	}
@@ -113,23 +116,9 @@ public class WSS2_0 implements PlugIn {
 		int sz = imgin[0][0].length; 
 
 		int[][][] img1 = new int[height][width][sz];
-		int[][][] adj = new int[height][width][sz];
-		int[][][] blurr = new int[height][width][sz];
-		int[][][] b = new int[height][width][sz];
-		int[][][] pre_fg = new int[height][width][sz];
-		int[][][] fg = new int[height][width][sz];
-		int[][][] fMorph1 = new int[height][width][sz];
-		int[][][] fMorph2 = new int[height][width][sz]; 
 
 		int[][] dummyimg1 = new int[height][width]; 
-		int[][] dummyimg2 = new int[height][width]; 
-		int[][] dummyimg3 = new int[height][width]; 
-		int[][] dummyimg4 = new int[height][width]; 
-		int[][] dummyimg5 = new int[height][width]; 
-		int[][] dummyimg6 = new int[height][width]; 
-		int[][] dummyimg7 = new int[height][width]; 
-		int[][] dummyimg8 = new int[height][width]; 
-
+	
 		for (int ii =0; ii < sz; ii++) { 
 			for (int jj = 0; jj < height; jj++) { 
 				for (int kk = 0; kk < width; kk++) { 
@@ -137,36 +126,21 @@ public class WSS2_0 implements PlugIn {
 				}
 			}
 			dummyimg1 = medfilt2(dummyimg1,3,3); 
-			dummyimg2 = enhanceImg(dummyimg1); 
-			dummyimg3 = imgaussfilt(dummyimg2,7); 
-			dummyimg4 = enhanceImg(dummyimg3); 
-			dummyimg5 = im2bw(dummyimg4,0.10); 
-			dummyimg6 = medfilt2(dummyimg5,5,5); 
-			dummyimg7 = imclose(dummyimg6,10); 
-			dummyimg8 = imopen(dummyimg7,5); 
+			dummyimg1 = enhanceImg(dummyimg1); 
+			dummyimg1 = imgaussfilt(dummyimg1,7); 
+			dummyimg1 = enhanceImg(dummyimg1); 
+			dummyimg1 = im2bw(dummyimg1,0.10); 
+			dummyimg1 = medfilt2(dummyimg1,5,5); 
+			dummyimg1 = imclose(dummyimg1,10); 
+			dummyimg1 = imopen(dummyimg1,5); 
 
 			for (int aa = 0; aa < height; aa++) { 
 				for (int bb = 0; bb < width; bb++) {
-					img1[aa][bb][ii] = dummyimg1[aa][bb]; 
-					adj[aa][bb][ii] = dummyimg2[aa][bb];
-					blurr[aa][bb][ii] = dummyimg3[aa][bb];
-					b[aa][bb][ii] = dummyimg4[aa][bb];
-					pre_fg[aa][bb][ii] = dummyimg5[aa][bb];
-					fg[aa][bb][ii] = dummyimg6[aa][bb];
-					fMorph1[aa][bb][ii] = dummyimg7[aa][bb];
-					fMorph2[aa][bb][ii] = dummyimg8[aa][bb];
+					img1[aa][bb][ii] = dummyimg1[aa][bb];
 				}
 			}
 		}
-		boolean success1 = videocreator(img1,dirname,"img1"); 
-		boolean success2 = videocreator(adj,dirname,"adj"); 
-		boolean success3 = videocreator(blurr,dirname,"blurr"); 
-		boolean success4 = videocreator(b,dirname,"b"); 
-		boolean success5 = videocreator(pre_fg,dirname,"pre_fg"); 
-		boolean success6 = videocreator(fg,dirname,"fg"); 
-		boolean success7 = videocreator(fMorph1,dirname,"fMorph1");
-		boolean success8 = videocreator(fMorph2,dirname,"fMorph2");  
-		return fMorph2; 
+		return img1; 
 	}		
 
 	public int[][][] conv2(int[][] imgin, int row, int col) { 
