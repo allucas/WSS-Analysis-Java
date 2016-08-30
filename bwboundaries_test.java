@@ -321,7 +321,7 @@ public class bwboundaries_test implements PlugIn {
 					int[][] points = moore_trace(xorig,yorig,xbackorig,ybackorig,imgpad,myconv);
 					coordinates.add(points);
 					sz_arr = coordinates.size();  
-				} else if (pxl==0 && psum == 0 && sz_arr > 0) { 
+				} else if (pxl==0 && psum > 0 && sz_arr > 0) { 
 					repeat = 0; 
 					for (int nn = 0; nn < sz_arr; nn++) { 
 						int[][] dummypoints = coordinates.get(nn);
